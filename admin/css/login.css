@@ -1,0 +1,39 @@
+body{
+    background-color: #1a3967;
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.logoContainer{
+    flex-grow: 1;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.logo{
+    width: 100%;
+    height: auto;
+}
+
+.card{
+    width: 450px;
+}
+
+.footerContainer{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.copy{
+    color: #fff;
+}

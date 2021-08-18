@@ -1,0 +1,272 @@
+.nav{
+    z-index: 999;
+    position: fixed;
+    width: 100%;
+    height: 100px;
+    background-color: #1a3967;
+    display: flex;
+    flex-direction: row;
+}
+
+.telemundo{
+    display: flex;
+    margin: 0 1rem 0 4rem;
+    align-items: center;
+}
+
+.telemundo img{
+    width: 100px;
+    height: auto;
+}
+
+.lcdlf{
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.lcdlf img{
+    width: 150px;
+    height: auto;
+}
+
+.botones{
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    align-items: center;
+}
+
+.comprar{
+    height: 3rem;
+    line-height: 3rem;
+    font-size: 1.5rem;
+}
+
+.comprar i{
+    font-size: 2rem;
+}
+.espacio{
+    width: 3rem;
+    height: 2rem;
+}
+
+.presupuesto{
+    margin: 0 2rem 0 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.presupuesto p{
+    margin: 0;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.presupuesto p#monto{
+    font-size: 2.5rem;
+}
+
+.content{
+    padding-top: 150px;
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 100px);
+}
+
+.productos{
+    flex-grow: 1;
+}
+
+.card{
+    margin: 0 auto;
+    width: 90%;
+    padding: .5rem;
+    height: 410px;
+    display: flex;
+    flex-direction: column;
+}
+
+.vpan{
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.product-img{
+    margin: 0 auto;
+    border: 1px solid #A9AAA8;
+    width: 100%;
+    height: 231px;
+}
+
+.hpan{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.name{
+    display: flex;
+    flex-grow: 1;
+    text-align: center;
+    margin: 0;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    word-break: break-word;
+    padding: .5rem;
+}
+
+.cantidad{
+    margin: 0;
+    border: 1px solid #A9AAA8;
+    border-radius: 50%;
+    width: 3.5rem;
+    height: 3.5rem;
+    font-size: 2rem;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-top: -1.75rem;
+    margin-right: -1.75rem;
+    background-color: #ad3b3a;
+    color: white;
+    font-weight: bold;
+}
+
+.es{
+    width: 90%;
+    margin: 0 auto;
+}
+
+.precio{
+    flex-grow: 1;
+    margin: 0;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.footerContainer{
+    display: flex;
+    flex-direction: column-reverse;
+    width: 100%;
+    text-align: center;
+}
+
+.btn-floating {
+    z-index: 2 !important;
+    width: 3.5rem !important;
+    height: 3.5rem !important;
+    line-height: 3.5rem !important;
+}
+
+.btn-floating i {
+    line-height: 3.5rem !important;
+    font-size: 3rem;
+}
+
+.copy{
+    font-size: 1rem;
+}
+
+
+.loader {
+    font-size: 10px;
+    margin: 25% auto;
+    text-indent: -9999em;
+    width: 11em;
+    height: 11em;
+    border-radius: 50%;
+    background: #ffffff;
+    background: -moz-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+    background: -webkit-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+    background: -o-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+    background: -ms-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+    background: linear-gradient(to right, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+    position: relative;
+    -webkit-animation: load3 1.4s infinite linear;
+    animation: load3 1.4s infinite linear;
+  }
+  .loader:before {
+    width: 50%;
+    height: 50%;
+    background: #FFF;
+    border-radius: 100% 0 0 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: '';
+  }
+  .loader:after {
+    background: #000;
+    width: 75%;
+    height: 75%;
+    border-radius: 50%;
+    content: '';
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+  @-webkit-keyframes load3 {
+    0% {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes load3 {
+    0% {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+  
+  .todo{
+    background-color: #000;
+    opacity: 0.5;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    position: fixed;
+    z-index: 99999999999999999999999999;
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
+
+  .modal{
+      border-radius: 25px;
+      height: 80%;
+      background-color: #1a3967;
+  }
+
+  .logo{
+      width: 50%;
+      margin-top: 6%;
+  }
+
+  .letras{
+      font-weight: bold;
+      color: #fff;
+  }
