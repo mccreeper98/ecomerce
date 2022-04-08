@@ -2,7 +2,7 @@
 require_once './admin/conect.php';
     $pres = $_POST['presupuesto'];
     $data = json_decode(stripslashes($_POST['data']));
-    $fecha = date("d")-1 . "/" . date("m") . "/" . date("Y");
+    $fecha = date("d") . "/" . date("m") . "/" . date("Y");
     $total = 0;
     foreach($data as $a){
         $cantidad =  $a->cantidad;

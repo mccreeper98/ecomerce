@@ -110,3 +110,7 @@ body{
     width: 450px;
     border: 1px solid #000;
 }
+
+.dropdown-content {
+    max-height: 250px;
+}

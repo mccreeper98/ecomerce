@@ -23,6 +23,9 @@
             <li><a href="presupuesto.php" class="waves-effect white-text" style="text-transform:uppercase;">
                 <i class="material-icons white-text">attach_money</i><span class="item-txt">Presupuesto</span>
                 </a></li>
+            <li><a href="categorias.php" class="waves-effect white-text" style="text-transform:uppercase;">
+                <i class="material-icons white-text">storage</i><span class="item-txt">Categorias</span>
+                </a></li>
             <li><a href="productos.php" class="waves-effect white-text" style="text-transform:uppercase;">
                 <i class="material-icons white-text">shopping_basket</i><span class="item-txt">Productos</span>
             </a></li>

@@ -8,7 +8,7 @@
     flex-direction: row;
 }
 
-.telemundo{
+.lcdlf{
     display: flex;
     margin: 0 1rem 0 4rem;
     align-items: center;
@@ -19,7 +19,7 @@
     height: auto;
 }
 
-.lcdlf{
+.telemundo{
     flex-grow: 1;
     display: flex;
     justify-content: center;
@@ -261,6 +261,10 @@
       background-color: #1a3967;
   }
 
+  .arriba{
+    background-color: #1a3967;
+  }
+
   .logo{
       width: 50%;
       margin-top: 6%;
@@ -270,3 +274,29 @@
       font-weight: bold;
       color: #fff;
   }
+
+  .logor{
+    width: 25%;
+    margin-top: 1rem;
+}
+
+.espacio{
+  width: 3rem;
+  height: 1rem;
+}
+
+#modal2{
+    border-radius: 25px;
+    min-height: 60%;
+    background-color: #fafafa;
+  overflow-y: scroll;
+}
+
+.scrollbar-primary::-webkit-scrollbar {
+    width: 10px;
+    background-color: transparent; }
+    
+    .scrollbar-primary::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+    background-color: #c9c9c9; }

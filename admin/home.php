@@ -36,7 +36,8 @@ if(!isset($_SESSION['admincasa'])){
                 </div>
 
                 <div class="row container">
-                    <a href="presupuesto.php" class="black-text">
+                <div class="col s1 m6 l1"></div>    
+                <a href="presupuesto.php" class="black-text">
                     <div class="col s4 m6 l4 card center z-depth-3">
                         <br><br><br>
                         <i class="material-icons" style="font-size:5rem; color:#ad3b3a;">attach_money</i>
@@ -44,6 +45,7 @@ if(!isset($_SESSION['admincasa'])){
                         <br><br><br>
                     </div>
                     </a>
+                    <div class="col s1 m6 l1"></div>
                     <a href="productos.php" class="black-text">
                     <div class="col s4 m6 l4 card center z-depth-3">
                         <br><br><br>
@@ -53,6 +55,19 @@ if(!isset($_SESSION['admincasa'])){
                     </div>
                     </a>
 
+                </div>
+
+                <div class="row container">
+                <div class="col s1 m6 l1"></div>
+                <a href="categorias.php" class="black-text">
+                    <div class="col s4 m6 l4 card center z-depth-3">
+                        <br><br><br>
+                        <i class="material-icons" style="font-size:5rem; color:#ad3b3a;">storage</i>
+                        <h4 style="text-transform:uppercase;">Categorias</h4>
+                        <br><br><br>
+                    </div>
+                    </a>
+                    <div class="col s1 m6 l1"></div>
                     <a href="pedidos.php" class="black-text">
                     <div class="col s4 m6 l4 card center z-depth-3">
                         <br><br><br>

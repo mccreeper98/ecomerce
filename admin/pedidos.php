@@ -11,7 +11,7 @@ require_once 'conect.php';
 error_reporting(E_ALL ^ E_NOTICE);
 
 //Cantidad de resultados por página (debe ser INT, no string/varchar)
-  $cantidad_resultados_por_pagina = 10;
+  $cantidad_resultados_por_pagina = 20;
 
 //Comprueba si está seteado el GET de HTTP
   if (isset($_GET["pagina"])) {
@@ -266,7 +266,7 @@ if(isset($_POST['productoe'])){
                                                             <p style="width:25px"><?php echo $num;?></p>
                                                             <p style="width:200px"><?php echo $prod['nombre'];?></p>
                                                             <p style="width:80px"><?php echo $prod['cantidad'];?></p>
-                                                            <p style="width:100px" class="rigth">$ <?php echo $prod['precio'];?></p>
+                                                            <p style="width:100px" class="rigth">$ <?php echo $prod['precio']*$prod['cantidad'];?></p>
                                                     </div>
 
                                                         <?php

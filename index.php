@@ -1,12 +1,26 @@
 <?php
   require_once './admin/conect.php';
 
-  $presupuesto = '0';
+  $presupuesto = '0';  
+
+  if (isset($_GET["cat"])) {
+    $catego = $_GET["cat"];
+  }else{
+    $catego = '';
+  }
+
+  if(isset($_GET["prods"])){
+    $prods = $_GET["prods"];
+  }
 
   $obtenPresupuesto = mysqli_query($connect, "SELECT * FROM presupuesto");
 
   while($pres = mysqli_fetch_array($obtenPresupuesto)){
     $presupuesto = $pres['presupuesto'];
+  }
+
+  if(isset($_GET["pres"])){
+    $presupuesto = $_GET["pres"];
   }
 
 
@@ -29,7 +43,16 @@
       <link rel="stylesheet" href="css/main.css">
       <!--Let browser know website is optimized for mobile-->
       <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-      
+      <style>
+        .caret{
+          display:none;
+        }
+
+        .select-dropdown{
+          font-size: 1.5rem !important;
+          font-weight: bold;
+        }
+      </style>
     </head>
     <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
     <body>
@@ -40,12 +63,13 @@
 
       <main>
         <div class="nav">
-          <div class="telemundo">
-            <img src="img/TELEMUNDO_LOGO_CMYK_COLOR_WITH_WHITE_TEXT.png" alt="">
+          <div class="lcdlf">
+            <!-- <img src="img/TELEMUNDO_LOGO_CMYK_COLOR_WITH_WHITE_TEXT.png" alt=""> -->
+            <img src="img/LCDLF_LOGO.png" alt="">
           </div>
 
-          <div class="lcdlf">
-            <img src="img/LCDLF_LOGO.png" alt="">
+          <div class="telemundo">
+            <!-- <img src="img/LCDLF_LOGO.png" alt=""> -->
           </div>
 
           <div class="botones">
@@ -62,13 +86,37 @@
 
         <div class="content">
           <div class="productos">
+          <div class="row" style="margin-left: 3rem">
+            <div class="input-field col s12 m6 l2">
+                <div>
+                <select id="categoria" name="categoria" onchange="redirect()">
+                <option value="" disabled selected>CATEGORÍAS</option>
+                <option value="">Todos</option>
+                <?php
+                
+                    $queryCar = mysqli_query($connect, "SELECT * FROM categorias ORDER BY nombre ASC");
+                    while($cat = mysqli_fetch_array($queryCar)){
+                        ?>
+                        <option value="<?php echo $cat['id']; ?>"><?php echo $cat['nombre']; ?></option>
+                        <?php
+                    }
+
+                
+                ?>
+                </select>
+                </div>
+            </div>
+          </div>
             <br>
             <div class="">
               <div class="row">
                   
                 <?php
-                
-                  $obtenProds = mysqli_query($connect, "SELECT * FROM productos");
+                  if($catego != ''){
+                    $obtenProds = mysqli_query($connect, "SELECT * FROM productos WHERE idCat = $catego ORDER BY nombre ASC");
+                  }else{
+                    $obtenProds = mysqli_query($connect, "SELECT * FROM productos ORDER BY nombre ASC");
+                  }
 
                   while($prod = mysqli_fetch_array($obtenProds)){
                     ?>
@@ -86,7 +134,7 @@
                                 <p class="precio" id="pre<?php echo $prod['id'];?>">$ </p>
                               </div>
                               <div class="hpan">
-                                  <a class="btn-floating waves-effect waves-light blue" onclick="add(<?php echo $prod['id'];?>, '<?php echo $prod['precio'];?>')"><i class="material-icons">add</i></a>
+                                  <a class="btn-floating waves-effect waves-light blue" onclick="add(<?php echo $prod['id'];?>, '<?php echo $prod['precio'];?>', '<?php echo $prod['nombre'];?>')"><i class="material-icons">add</i></a>
                                   <div class="espacio"></div>
                                   <a class="btn-floating waves-effect waves-light" style="background-color:gray" onclick="remove(<?php echo $prod['id'];?>, '<?php echo $prod['precio'];?>')"><i class="material-icons">remove</i></a>
                                 </div>
@@ -128,7 +176,27 @@
             <br>
             <a class="waves-effect btn comprar" href="gracias.html" style="background-color:#ad3b3a;">Aceptar</a>
         </div>
+      </div>
+
+      <!-- Modal Structure -->
+      <div id="modal2" class="modal scrollbar-primary">
+        <div class="modal-content center">
+          <div class="arriba">
+            <img src="img/LCDLF_LOGO.png" class="logor">
+          </div>
+          <div class="abajo">
+          <div class="espacior"></div>
+            <br>
+            <div class="container resumen">
+              
+            </div>
+            <br>
+            <a class="modal-close waves-effect btn comprar" style="background-color:#1a3967;">Seguir comprando</a>
+            <a class="modal-close waves-effect btn comprar" onclick="return comprar1()" style="background-color:#ad3b3a;">Confirmar</a>
+          </div>
         </div>
+      </div>
+
       <!--Import jQuery before materialize.js-->
       
       <script type="text/javascript" src="js/materialize.min.js"></script>
@@ -138,19 +206,40 @@
         var presupuesto;
         var productos = [];
 
-                  function mos(){
-                    alert($('#t').width())
-                  }
+        function redirect(){
+          var cat = $("#categoria").val();
+          window.location.href = "?cat="+cat+"&pres="+presupuesto+"&prods="+JSON.stringify(productos);
+        }
+
+        function mos(){
+          alert($('#t').width())
+        }
 
         $(document).ready(function(){
+          $('select').material_select();
           $('.modal').modal();
           var press = <?php echo $presupuesto; ?>;
           presupuesto = parseFloat(press);
           $('#monto').html('');
           $('#monto').html(new Intl.NumberFormat("en-EU", {style: "currency", currency: "USD"}).format(presupuesto));
+
+          <?php
+            if(isset($prods)){
+            ?>
+              productos = <?php echo $prods; ?>;
+              
+              for (let index = 0; index < productos.length; index++) {
+                const element = productos[index];
+                $('#cantidad'+element['id']).html('');
+                $('#cantidad'+element['id']).html(element['cantidad']);
+                
+              }
+            <?php
+            }
+          ?>
         });
 
-        function add(id, precio){
+        function add(id, precio, nombre){
           var cantidad = $('#cantidad'+id).html();
           cantidad++;
 
@@ -160,6 +249,7 @@
 
           if(producto === undefined){
             productos.push({
+              "nombre": nombre,
               "id": id,
               "precio": precio,
               "cantidad": cantidad
@@ -217,6 +307,49 @@
         }
         
         function comprar(){
+          if(productos.length > 0){
+            var total = 0;
+
+            var resumen = `<table class="striped">
+              <thead>
+                  <tr>
+                      <th>Nombre</th>
+                      <th>Precio</th>
+                      <th>Cantidad</th>
+                      <th>Subtotal</th>
+                  </tr>
+              </thead>
+
+              <tbody id="tb">`;
+          for (let index = 0; index < productos.length; index++) {
+              const element = productos[index];
+              var subTotal = element['precio'] * element['cantidad'];
+              total = total + subTotal;
+
+              resumen += `<tr>
+                              <td>${element['nombre']}</td>
+                              <td>${new Intl.NumberFormat("en-EU", {style: "currency", currency: "USD"}).format(element['precio'])}</td>
+                              <td>${element['cantidad']}</td>
+                              <td>${new Intl.NumberFormat("en-EU", {style: "currency", currency: "USD"}).format(subTotal)}</td>
+                          </tr>`;
+          }
+          
+          resumen += `<tr>
+                              <td></td>
+                              <td></td>
+                              <td><b>Total: </b></td>
+                              <td><b>${new Intl.NumberFormat("en-EU", {style: "currency", currency: "USD"}).format(total)}</b></td>
+                          </tr>`;
+
+          resumen += `</tbody>
+                      </table>`;
+          $('.resumen').html('');
+          $('.resumen').html(resumen);
+          $('#modal2').modal('open');
+          }
+        }
+
+        function comprar1(){
           if(productos.length > 0){
             $('#lo').removeClass('hide');
 

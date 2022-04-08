@@ -11,7 +11,7 @@ require_once 'conect.php';
 error_reporting(E_ALL ^ E_NOTICE);
 
 //Cantidad de resultados por página (debe ser INT, no string/varchar)
-  $cantidad_resultados_por_pagina = 10;
+  $cantidad_resultados_por_pagina = 20;
 
 //Comprueba si está seteado el GET de HTTP
   if (isset($_GET["pagina"])) {
@@ -47,10 +47,11 @@ $empezar_desde = ($pagina-1) * $cantidad_resultados_por_pagina;
 if(isset($_POST['producto'])){
     $img = $_FILES['imgproducto']['name'];
     $img = strval(rand()).$img;
-    if(isset($_POST['name']) && $_POST['name'] != "" && isset($_POST['precio']) && $_POST['precio'] != "" && isset($_POST['unidades']) && $_POST['unidades'] != "" && $img != ""){
+    if(isset($_POST['name']) && $_POST['name'] != "" && isset($_POST['categoria']) && $_POST['categoria'] != "" && isset($_POST['precio']) && $_POST['precio'] != "" && isset($_POST['unidades']) && $_POST['unidades'] != "" && $img != ""){
         $name = $_POST['name'];
         $precio = $_POST['precio'];
         $unidades = $_POST['unidades'];
+        $categoria = $_POST['categoria'];
 
         $tipoimg = $_FILES['imgproducto']['type'];
         $tamanoimg = $_FILES['imgproducto']['size'];
@@ -64,7 +65,7 @@ if(isset($_POST['producto'])){
               }else{
                   if (move_uploaded_file($tempimg, '../img/productos/'.$img)) {
     
-                    $insertStatement = "INSERT INTO productos(precio, nombre, unidades, img) VALUES ('$precio', '$name', '$unidades', '$img')";
+                    $insertStatement = "INSERT INTO productos(precio, nombre, unidades, img, idCat) VALUES ('$precio', '$name', '$unidades', '$img', '$categoria')";
 
                     $res = mysqli_query($connect, $insertStatement);
 
@@ -89,10 +90,11 @@ if(isset($_POST['producto'])){
 if(isset($_POST['productoe'])){
     $img = $_FILES['imgproductoe']['name'];
 
-    if(isset($_POST['namee']) && $_POST['namee'] != "" && isset($_POST['precioe']) && $_POST['precioe'] != "" && isset($_POST['unidadese']) && $_POST['unidadese'] != ""){
+    if(isset($_POST['namee']) && $_POST['namee'] != "" && isset($_POST['nuevaCategoria']) && $_POST['nuevaCategoria'] != "" && isset($_POST['precioe']) && $_POST['precioe'] != "" && isset($_POST['unidadese']) && $_POST['unidadese'] != ""){
         $name = $_POST['namee'];
         $precio = $_POST['precioe'];
         $unidades = $_POST['unidadese'];
+        $categoria = $_POST['nuevaCategoria'];
 
         $old = $_POST['old'];
         $id = $_POST['id'];
@@ -111,7 +113,7 @@ if(isset($_POST['productoe'])){
                 }else{
                     if (move_uploaded_file($tempimg, '../img/productos/'.$img)) {
                         unlink('../img/productos/'.$old);
-                        $updateStatement = "UPDATE productos SET precio = '$precio', nombre = '$nombre', unidades = '$unidades', img = '$img' WHERE id = $id";
+                        $updateStatement = "UPDATE productos SET precio = '$precio', nombre = '$name', unidades = '$unidades', img = '$img', idCat = '$categoria' WHERE id = $id";
 
                         $res = mysqli_query($connect, $updateStatement);
 
@@ -126,7 +128,7 @@ if(isset($_POST['productoe'])){
                 }
             }
         }else{
-            $updateStatement = "UPDATE productos SET precio = '$precio', nombre = '$name', unidades = '$unidades' WHERE id = $id";
+            $updateStatement = "UPDATE productos SET precio = '$precio', nombre = '$name', unidades = '$unidades', idCat = '$categoria' WHERE id = $id";
 
                         $res = mysqli_query($connect, $updateStatement);
 
@@ -138,6 +140,13 @@ if(isset($_POST['productoe'])){
         }
 
     }else{
+        echo("name: ". $_POST['namee']);
+        echo('<br>');
+        echo("cat: ". $_POST['nuevaCategoria']);
+        echo('<br>');
+        echo("pre: ". $_POST['precioe']);
+        echo('<br>');
+        echo("uni: ". $_POST['unidadese']);
         $message = 1;
     }
 }
@@ -190,7 +199,7 @@ if(isset($_POST['productoe'])){
                                 <div class="row">
                                     <div class="file-field input-field">
                                         <div class="btn col s12" style="background-color:#ad3b3a;">
-                                            <span>IMAGEN DEL PRODUCTO</span>
+                                            <span>IMAGEN DEL PRODUCTO (960px x 960px)</span>
                                             <input type="file" id="imgproducto" name="imgproducto" accept="image/*">
                                         </div>
                                         <div class="file-path-wrapper">
@@ -203,13 +212,31 @@ if(isset($_POST['productoe'])){
                                         <label for="name">Nombre</label>
                                     </div>
                                     <div class="input-field col s12">
+                                        <select id="categoria" class="sel" value="" name="categoria">
+                                        <option value="" disabled selected>Selecciona una categoría</option>
+                                        <?php
+                                        
+                                            $queryCar = mysqli_query($connect, "SELECT * FROM categorias ORDER BY nombre ASC");
+                                            while($cat = mysqli_fetch_array($queryCar)){
+                                                ?>
+                                                <option value="<?php echo $cat['id']; ?>"><?php echo $cat['nombre']; ?></option>
+                                                <?php
+                                            }
+
+                                        
+                                        ?>
+                                        </select>
+                                        <label>Categoría</label>
+                                    </div>
+                                    <div class="input-field col s12">
                                         <input id="precio" name="precio" type="text" class="validate">
                                         <label for="precio">Precio</label>
                                     </div>
-                                    <div class="input-field col s12">
-                                        <input id="unidades" name="unidades" type="text" class="validate">
+                                    <!-- <div class="input-field col s12">
+                                        <input id="unidades" name="unidades" type="hidden" class="validate">
                                         <label for="unidades">Unidades</label>
-                                    </div>
+                                    </div> -->
+                                    <input id="unidades" name="unidades" type="hidden" value="2" class="validate">
                                     <div class="col s12">
                                         <input type="hidden" name="producto">
                                         <a class="btn waves-effect waves-light" style="background-color:#ad3b3a;"
@@ -232,8 +259,9 @@ if(isset($_POST['productoe'])){
                         <tr>
                             <th>ID</th>
                             <th>Nombre</th>
+                            <th>Categoría</th>
                             <th>Precio</th>
-                            <th>Unidades</th>
+                            <!-- <th>Unidades</th> -->
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -251,7 +279,7 @@ if(isset($_POST['productoe'])){
                         if($total_registros != 0){
                             $total_paginas = ceil($total_registros/$cantidad_resultados_por_pagina);
 
-                            $obtAsoc = mysqli_query($connect, "SELECT * FROM productos ORDER BY id DESC LIMIT $empezar_desde, $cantidad_resultados_por_pagina");
+                            $obtAsoc = mysqli_query($connect, "SELECT prod.id, prod.nombre, prod.precio, prod.unidades, prod.img, prod.idCat, cat.nombre as categoria FROM productos as prod LEFT JOIN categorias as cat ON cat.id = prod.idCat ORDER BY nombre ASC LIMIT $empezar_desde, $cantidad_resultados_por_pagina");
 
                             while ($asoc = mysqli_fetch_array($obtAsoc)) {
                                 ?>
@@ -262,12 +290,15 @@ if(isset($_POST['productoe'])){
                             <td>
                                 <?php echo $asoc['nombre']; ?>
                             </td>
+                            <td>
+                                <?php echo $asoc['categoria']; ?>
+                            </td>
                             <td>$
                                 <?php echo $asoc['precio']; ?>
                             </td>
-                            <td>
-                                <?php echo $asoc['unidades']; ?>
-                            </td>
+                            <!-- <td>
+                                <?php //echo $asoc['unidades']; ?>
+                            </td> -->
                             <td><a class="waves-effect waves-light black-text modal-trigger"
                                     href="#detail<?php echo $asoc['id'] ?>"><i class="material-icons" style="color:#2d6eae">photo</i></a><a
                                     class="waves-effect waves-light blue-text modal-trigger"
@@ -314,7 +345,7 @@ if(isset($_POST['productoe'])){
                                             <div class="row">
                                                 <div class="file-field input-field">
                                                     <div class="btn col s12" style="background-color:#ad3b3a;">
-                                                        <span>IMAGEN DEL PRODUCTO</span>
+                                                        <span>IMAGEN DEL PRODUCTO (960px x 960px)</span>
                                                         <input type="file" id="imgproductoe<?php echo $asoc['id']; ?>"
                                                             name="imgproductoe" accept="image/*">
                                                     </div>
@@ -330,6 +361,23 @@ if(isset($_POST['productoe'])){
                                                     <label for="namee<?php echo $asoc['id']; ?>">Nombre</label>
                                                 </div>
                                                 <div class="input-field col s12">
+                                                    <select class="sel" id="categoriae<?php echo $asoc['id']; ?>" name="catego" value="<?php echo $asoc['idCat']; ?>"> 
+                                                    <option value="" disabled>Selecciona una categoría</option>
+                                                    <?php
+                                                    
+                                                        $queryCar = mysqli_query($connect, "SELECT * FROM categorias ORDER BY nombre ASC");
+                                                        while($cat = mysqli_fetch_array($queryCar)){
+                                                            ?>
+                                                            <option value="<?php echo $cat['id']; ?>"<?php if($cat['id'] == $asoc['idCat']){echo 'selected';} ?>><?php echo $cat['nombre']; ?></option>
+                                                            <?php
+                                                        }
+
+                                                    
+                                                    ?>
+                                                    </select>
+                                                    <label>Categoría</label>
+                                                </div>
+                                                <div class="input-field col s12">
                                                     <input id="precioe<?php echo $asoc['id']; ?>" name="precioe"
                                                         type="text" class="validate"
                                                         value="<?php echo $asoc['precio']; ?>">
@@ -337,11 +385,12 @@ if(isset($_POST['productoe'])){
                                                 </div>
                                                 <div class="input-field col s12">
                                                     <input id="unidadese<?php echo $asoc['id']; ?>" name="unidadese"
-                                                        type="text" class="validate"
+                                                        type="hidden" class="validate"
                                                         value="<?php echo $asoc['unidades']; ?>">
-                                                    <label for="unidadese<?php echo $asoc['id']; ?>">Unidades</label>
+                                                    <!-- <label for="unidadese<?php // echo $asoc['id']; ?>">Unidades</label> -->
                                                 </div>
                                                 <div class="col s12">
+                                                    <input type="hidden" name="nuevaCategoria" id="nuevaCategoria<?php echo $asoc['id']; ?>">
                                                     <input type="hidden" name="productoe">
                                                     <input type="hidden" name="old" value="<?php echo $asoc['img']; ?>">
                                                     <input type="hidden" name="id" value="<?php echo $asoc['id']; ?>">
@@ -442,15 +491,17 @@ if(isset($_POST['productoe'])){
                 onOpen: function (el) { }, // A function to be called when sideNav is opened
                 onClose: function (el) { }, // A function to be called when sideNav is closed
             });
+            $('.sel').material_select();
         });
+
 
         function submit() {
 
             var name = $("#name").val();
             var precio = $("#precio").val();
-            var unidades = $("#unidades").val();
+            // var unidades = $("#unidades").val();
             var img = $("#imgproducto").val();
-
+            var cat = $("#categoria").val();
             if (name.length == 0 || name == "") {
                 Swal.fire({
                     title: "Error",
@@ -471,10 +522,22 @@ if(isset($_POST['productoe'])){
                     closeOnConfirm: false,
                     confirmButtonText: 'Aceptar'
                 });
-            } else if (unidades.length == 0 || unidades == "") {
+            } 
+            else if (unidades.length == 0 || unidades == "") {
                 Swal.fire({
                     title: "Error",
                     text: "Ingrese las unidades",
+                    icon: "error",
+                    showCancelButton: false,
+                    confirmButtonColor: "#ad3b3a",
+                    closeOnConfirm: false,
+                    confirmButtonText: 'Aceptar'
+                });
+            } 
+            else if (cat  == null || cat == "") {
+                Swal.fire({
+                    title: "Error",
+                    text: "Selecciona la categoría",
                     icon: "error",
                     showCancelButton: false,
                     confirmButtonColor: "#ad3b3a",
@@ -491,6 +554,13 @@ if(isset($_POST['productoe'])){
             var name = $("#namee" + id).val();
             var precio = $("#precioe" + id).val();
             var unidades = $("#unidadese" + id).val();
+            var cat = $("#categoriae"+ id).val();
+
+            console.log(cat);
+
+            $("#nuevaCategoria"+ id).val(cat);
+
+            console.log($("#nuevaCategoria"+ id).val());
 
             if (name.length == 0 || name == "") {
                 Swal.fire({
@@ -516,6 +586,16 @@ if(isset($_POST['productoe'])){
                 Swal.fire({
                     title: "Error",
                     text: "Ingrese las unidades",
+                    icon: "error",
+                    showCancelButton: false,
+                    confirmButtonColor: "#ad3b3a",
+                    closeOnConfirm: false,
+                    confirmButtonText: 'Aceptar'
+                });
+            } else if (cat.length == 0 || cat == "") {
+                Swal.fire({
+                    title: "Error",
+                    text: "Selecciona la categoría",
                     icon: "error",
                     showCancelButton: false,
                     confirmButtonColor: "#ad3b3a",
